@@ -54,6 +54,17 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
     log_format: Literal["json", "text"] = Field(default="json", alias="LOG_FORMAT")
 
+    # Database & Connection Pooling
+    database_url: str = Field(
+        default="postgresql+psycopg://postgres:postgres@localhost:5432/enterprise_agent",
+        alias="DATABASE_URL",
+    )
+    database_pool_size: int = Field(default=10, alias="DATABASE_POOL_SIZE")
+    database_max_overflow: int = Field(default=20, alias="DATABASE_MAX_OVERFLOW")
+    database_pool_timeout: int = Field(default=30, alias="DATABASE_POOL_TIMEOUT")
+    database_pool_recycle: int = Field(default=1800, alias="DATABASE_POOL_RECYCLE")
+    database_echo: bool = Field(default=False, alias="DATABASE_ECHO")
+
 
 @lru_cache()
 def get_settings() -> Settings:

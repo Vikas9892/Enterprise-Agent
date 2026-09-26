@@ -186,32 +186,49 @@ curl -X GET http://localhost:8000/api/v1/health
 
 ---
 
-## 7. Running the Test Suite
+## 7. Running Database Migrations & Seeding
 
-Execute tests using `pytest`:
+### Apply Alembic Migrations
+```bash
+# Apply all pending schema migrations
+alembic upgrade head
+```
+
+### Seed Demo Data
+Populate the database with enterprise customers, products, inventory, orders, invoices, support tickets, users, and RBAC roles:
+```bash
+python scripts/seed_data.py
+```
+
+---
+
+## 8. Running the Test Suite
+
+Execute the full suite covering API endpoints, database models, and repository operations:
 
 ```bash
 # From within the backend/ directory with .venv active:
 pytest -v
 ```
 
-To run with coverage or concise output:
+To run with concise output:
 ```bash
 pytest -ra -q
 ```
 
 ---
 
-## 8. Phase Evolution Roadmap
+## 9. Phase Evolution Roadmap
 
-| Phase | Milestone | Description |
-| :--- | :--- | :--- |
-| **Phase 1** | **Foundation (Current)** | Clean monorepo, FastAPI skeleton, Pydantic settings, structured logging, tests |
-| **Phase 2** | **Persistence & Security** | PostgreSQL + asyncpg, Redis cache, JWT authentication, RBAC authorization |
-| **Phase 3** | **LLM Gateway & MCP** | LiteLLM routing, exponential backoff with jitter, MCP client and MCP server |
-| **Phase 4** | **Agent Orchestrator** | State-machine/graph orchestration, cyclical reflection loops, tool calling |
-| **Phase 5** | **Observability & Eval** | LangSmith tracing, OpenTelemetry, audit logging, evaluation datasets |
-| **Phase 6** | **Frontend Experience** | Next.js chat interface, streaming SSE, tool execution trace UI |
+| Phase | Milestone | Status | Description |
+| :--- | :--- | :--- | :--- |
+| **Phase 1** | **Foundation** | Done | Clean monorepo, FastAPI skeleton, Pydantic settings, structured logging, tests |
+| **Phase 2** | **Database & Domain Foundation** | Done | PostgreSQL, SQLAlchemy 2.x, Alembic, 11 models, 8 repositories, migrations & seed |
+| **Phase 3** | **Security & Authentication** | Planned | JWT authentication, password hashing, RBAC token verification dependencies |
+| **Phase 4** | **LLM Gateway & MCP** | Planned | LiteLLM routing, exponential backoff with jitter, MCP client and MCP server |
+| **Phase 5** | **Agent Orchestrator** | Planned | State-machine/graph orchestration, cyclical reflection loops, tool calling |
+| **Phase 6** | **Observability & Eval** | Planned | LangSmith tracing, OpenTelemetry, audit logging, evaluation datasets |
+| **Phase 7** | **Frontend Experience** | Planned | Next.js chat interface, streaming SSE, tool execution trace UI |
 
 ---
 
