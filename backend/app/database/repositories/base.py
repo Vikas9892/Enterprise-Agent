@@ -31,9 +31,9 @@ class BaseRepository(Generic[ModelType]):
         result = self.session.execute(statement).scalar()
         return result or 0
 
-    def create(self, **kwargs: Any) -> ModelType:
-        """Instantiate, persist, and flush a new record."""
-        instance = self.model(**kwargs)
+    def create(self, entity: Optional[ModelType] = None, **kwargs: Any) -> ModelType:
+        """Instantiate or persist a new record and flush."""
+        instance = entity if entity is not None else self.model(**kwargs)
         self.session.add(instance)
         self.session.flush()
         return instance
