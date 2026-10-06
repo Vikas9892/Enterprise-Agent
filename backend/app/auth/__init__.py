@@ -1,5 +1,29 @@
-"""Authentication and authorization package.
+"""Authentication and authorization package."""
 
-Reserved for JWT verification, OAuth2 flows, password hashing, and role-based
-access control (RBAC) to be implemented in future phases.
-"""
+from app.auth.schemas import (
+    RoleResponse,
+    Token,
+    TokenPayload,
+    UserLogin,
+    UserRegister,
+    UserResponse,
+)
+from app.auth.security import (
+    create_access_token,
+    decode_access_token,
+    hash_password,
+    verify_password,
+)
+
+__all__ = [
+    "RoleResponse",
+    "Token",
+    "TokenPayload",
+    "UserLogin",
+    "UserRegister",
+    "UserResponse",
+    "create_access_token",
+    "decode_access_token",
+    "hash_password",
+    "verify_password",
+]

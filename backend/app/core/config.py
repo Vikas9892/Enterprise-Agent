@@ -66,6 +66,14 @@ class Settings(BaseSettings):
     database_pool_recycle: int = Field(default=1800, alias="DATABASE_POOL_RECYCLE")
     database_echo: bool = Field(default=False, alias="DATABASE_ECHO")
 
+    # Security & Authentication (Phase 3)
+    secret_key: str = Field(
+        default="enterprise-agent-development-insecure-secret-key-change-in-prod-0987654321",
+        alias="SECRET_KEY",
+    )
+    algorithm: str = Field(default="HS256", alias="ALGORITHM")
+    access_token_expire_minutes: int = Field(default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+
 
 @lru_cache()
 def get_settings() -> Settings:
