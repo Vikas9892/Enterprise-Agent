@@ -37,9 +37,9 @@ uvicorn app.main:app --reload --port 8000
   - `repositories/`: CustomerRepository, OrderRepository, ProductRepository, InvoiceRepository, SupportTicketRepository, UserRepository, AuditLogRepository.
 - `app/agent/`: State & graph agent orchestration (Future phase).
 - `app/auth/`: JWT authentication & RBAC (Phase 3 Active - JWT, bcrypt, RBAC dependencies).
-- `app/llm/`: LiteLLM gateway with retries & jitter (Future phase).
-- `app/mcp/`: Model Context Protocol client (Future phase).
-- `app/tools/`: Tool registry & execution (Future phase).
+- `app/llm/`: LiteLLM gateway with retries & jitter (Phase 4 Active - multi-provider routing & fallbacks).
+- `app/mcp/`: Model Context Protocol client (Phase 4 Active - JSON-RPC 2.0 client).
+- `app/tools/`: Tool registry & execution (Phase 4 Active - local & MCP tool catalog).
 - `app/evaluation/`: LangSmith evaluation benchmarks (Future phase).
 - `app/observability/`: Distributed tracing & audit logging (Future phase).
 - `alembic/`: Schema migration versions and environment runner.
