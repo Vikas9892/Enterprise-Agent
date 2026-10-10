@@ -1,7 +1,7 @@
 """Application configuration management using Pydantic Settings."""
 
 from functools import lru_cache
-from typing import List, Literal, Union
+from typing import List, Literal, Optional, Union
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import json
@@ -73,6 +73,34 @@ class Settings(BaseSettings):
     )
     algorithm: str = Field(default="HS256", alias="ALGORITHM")
     access_token_expire_minutes: int = Field(default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+
+    # LLM Gateway & MCP (Phase 4)
+    litellm_model: str = Field(default="gpt-4o", alias="LITELLM_MODEL")
+    llm_fallback_models: Union[List[str], str] = Field(
+        default=["gpt-4o-mini", "claude-3-5-sonnet-20240620"],
+        alias="LLM_FALLBACK_MODELS",
+    )
+    llm_max_retries: int = Field(default=3, alias="LLM_MAX_RETRIES")
+    llm_retry_initial_delay: float = Field(default=1.0, alias="LLM_RETRY_INITIAL_DELAY")
+    llm_retry_max_delay: float = Field(default=30.0, alias="LLM_RETRY_MAX_DELAY")
+    llm_retry_jitter: bool = Field(default=True, alias="LLM_RETRY_JITTER")
+    openai_api_key: Optional[str] = Field(default=None, alias="OPENAI_API_KEY")
+    anthropic_api_key: Optional[str] = Field(default=None, alias="ANTHROPIC_API_KEY")
+    mcp_server_url: str = Field(default="http://localhost:8001", alias="MCP_SERVER_URL")
+
+    @field_validator("llm_fallback_models", mode="before")
+    @classmethod
+    def assemble_fallback_models(cls, v: Union[str, List[str]]) -> List[str]:
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    return json.loads(v)
+                except json.JSONDecodeError:
+                    pass
+            return [i.strip() for i in v.split(",") if i.strip()]
+        elif isinstance(v, (list, tuple)):
+            return list(v)
+        return ["gpt-4o-mini"]
 
 
 @lru_cache()
