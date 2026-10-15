@@ -7,6 +7,8 @@ from typing import Any, Callable, Dict, List, Optional
 from app.core.logging import get_logger
 from app.mcp.client import MCPClient
 from app.mcp.schemas import MCPTool
+from app.tools.builtin_tools import calculate, get_current_datetime, verify_policy_compliance
+from app.tools.schemas import ToolMetadata
 
 logger = get_logger("app.tools.registry")
 
@@ -20,13 +22,17 @@ class ToolDefinition:
     parameters: Dict[str, Any]
     handler: Optional[Callable[..., Any]] = None
     source: str = "local"
+    is_sensitive: bool = False
+    requires_approval: bool = False
 
 
 class ToolRegistry:
     """Central registry and dispatch engine for enterprise tools."""
 
-    def __init__(self) -> None:
+    def __init__(self, register_defaults: bool = False) -> None:
         self._tools: Dict[str, ToolDefinition] = {}
+        if register_defaults:
+            self.register_builtin_tools()
 
     def register(
         self,
@@ -35,6 +41,8 @@ class ToolRegistry:
         parameters: Dict[str, Any],
         handler: Optional[Callable[..., Any]] = None,
         source: str = "local",
+        is_sensitive: bool = False,
+        requires_approval: bool = False,
     ) -> None:
         """Register a new tool into the catalog."""
         self._tools[name] = ToolDefinition(
@@ -43,8 +51,70 @@ class ToolRegistry:
             parameters=parameters,
             handler=handler,
             source=source,
+            is_sensitive=is_sensitive,
+            requires_approval=requires_approval,
         )
         logger.debug(f"Registered tool '{name}' (source: {source})")
+
+    def register_tool(
+        self,
+        name: str,
+        func: Callable[..., Any],
+        description: str,
+        parameters: Dict[str, Any],
+        is_sensitive: bool = False,
+        requires_approval: bool = False,
+    ) -> None:
+        """Convenience method to register a local Python function tool."""
+        self.register(
+            name=name,
+            description=description,
+            parameters=parameters,
+            handler=func,
+            source="local",
+            is_sensitive=is_sensitive,
+            requires_approval=requires_approval,
+        )
+
+    def register_builtin_tools(self) -> None:
+        """Register standard built-in local enterprise tools."""
+        self.register_tool(
+            name="get_current_datetime",
+            func=get_current_datetime,
+            description="Retrieve current enterprise server UTC timestamp and date.",
+            parameters={"type": "object", "properties": {}},
+        )
+        self.register_tool(
+            name="calculate",
+            func=calculate,
+            description="Safely evaluate mathematical expressions for financial/operational calculation.",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "expression": {"type": "string", "description": "Mathematical formula to evaluate"}
+                },
+                "required": ["expression"],
+            },
+        )
+        self.register_tool(
+            name="verify_policy_compliance",
+            func=verify_policy_compliance,
+            description="Verify enterprise compliance rules and approval requirements for actions (refunds, cancellations).",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "action_type": {"type": "string", "description": "Action being attempted, e.g. 'refund', 'cancel_order'"},
+                    "amount": {"type": "number", "description": "Monetary value associated with the action"}
+                },
+                "required": ["action_type"],
+            },
+            is_sensitive=True,
+        )
+
+    def is_local_tool(self, name: str) -> bool:
+        """Check if tool name belongs to local tools."""
+        tool = self._tools.get(name)
+        return bool(tool and tool.source == "local")
 
     def register_mcp_tools(
         self, tools: List[MCPTool], mcp_client: MCPClient
@@ -52,13 +122,6 @@ class ToolRegistry:
         """Register a list of remote tools discovered from an MCP server."""
         for tool in tools:
             # Create a closure binding the tool name and mcp_client
-            async def _create_mcp_handler(tool_name: str):
-                async def _mcp_handler(**kwargs):
-                    result = await mcp_client.call_tool(tool_name, kwargs)
-                    return result.content
-                return _mcp_handler
-
-            # Asynchronous factory
             async def handler_proxy(_name=tool.name, **kwargs):
                 result = await mcp_client.call_tool(_name, kwargs)
                 return result.content
@@ -83,6 +146,8 @@ class ToolRegistry:
                 "description": t.description,
                 "parameters": t.parameters,
                 "source": t.source,
+                "is_sensitive": t.is_sensitive,
+                "requires_approval": t.requires_approval,
             }
             for t in self._tools.values()
         ]
@@ -102,6 +167,15 @@ class ToolRegistry:
         else:
             return tool.handler(**arguments)
 
+    async def execute_tool(self, name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute tool and return structured execution dictionary."""
+        try:
+            result = await self.execute(name, arguments)
+            return {"tool": name, "result": result, "is_error": False}
+        except Exception as exc:
+            logger.error(f"Error executing tool '{name}': {exc}")
+            return {"tool": name, "error": str(exc), "is_error": True}
+
     def to_openai_tools(self) -> List[Dict[str, Any]]:
         """Export tools formatted for OpenAI / LiteLLM function calling schemas."""
         schemas = []
@@ -118,6 +192,15 @@ class ToolRegistry:
             )
         return schemas
 
+    async def get_all_tool_definitions(self) -> List[Dict[str, Any]]:
+        """Asynchronously return all tool definitions in OpenAI / LiteLLM format."""
+        return self.to_openai_tools()
 
-# Global singleton tool registry
-tool_registry = ToolRegistry()
+
+# Global singleton tool registry with built-in enterprise tools
+tool_registry = ToolRegistry(register_defaults=True)
+
+
+def get_tool_registry() -> ToolRegistry:
+    """Return the global tool registry singleton instance."""
+    return tool_registry

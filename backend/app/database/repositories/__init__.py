@@ -8,6 +8,7 @@ from app.database.repositories.invoice import InvoiceRepository
 from app.database.repositories.support_ticket import SupportTicketRepository
 from app.database.repositories.user import UserRepository
 from app.database.repositories.audit_log import AuditLogRepository
+from app.database.repositories.agent_session import AgentSessionRepository
 
 __all__ = [
     "BaseRepository",
@@ -18,4 +19,5 @@ __all__ = [
     "SupportTicketRepository",
     "UserRepository",
     "AuditLogRepository",
+    "AgentSessionRepository",
 ]

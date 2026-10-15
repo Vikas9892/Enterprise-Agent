@@ -14,6 +14,7 @@ from app.database.models.order import Order, OrderItem
 from app.database.models.invoice import Invoice
 from app.database.models.support_ticket import SupportTicket
 from app.database.models.audit_log import AuditLog
+from app.database.models.agent_session import AgentSession, AgentSessionStep
 
 __all__ = [
     "Base",
@@ -32,4 +33,6 @@ __all__ = [
     "Invoice",
     "SupportTicket",
     "AuditLog",
+    "AgentSession",
+    "AgentSessionStep",
 ]
