@@ -226,7 +226,7 @@ pytest -ra -q
 | **Phase 2** | **Database & Domain Foundation** | Done | PostgreSQL, SQLAlchemy 2.x, Alembic, 11 models, 8 repositories, migrations & seed |
 | **Phase 3** | **Security & Authentication** | Done | JWT authentication, bcrypt password hashing, auth endpoints, and RBAC dependencies |
 | **Phase 4** | **LLM Gateway & MCP** | Done | LiteLLM routing, exponential backoff with jitter, MCP client and MCP server |
-| **Phase 5** | **Agent Orchestrator** | Planned | State-machine/graph orchestration, cyclical reflection loops, tool calling |
+| **Phase 5** | **Agent Orchestrator** | Done | State-machine graph engine, cyclical reflection loops, HITL approval checkpoints, tool execution, session persistence |
 | **Phase 6** | **Observability & Eval** | Planned | LangSmith tracing, OpenTelemetry, audit logging, evaluation datasets |
 | **Phase 7** | **Frontend Experience** | Planned | Next.js chat interface, streaming SSE, tool execution trace UI |
 

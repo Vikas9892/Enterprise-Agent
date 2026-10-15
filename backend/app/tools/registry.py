@@ -110,6 +110,44 @@ class ToolRegistry:
             },
             is_sensitive=True,
         )
+        from app.tools.builtin_tools import check_inventory, get_customer, get_order_details, get_support_ticket
+
+        self.register_tool(
+            name="get_customer",
+            func=get_customer,
+            description="Look up enterprise customer profile and account details.",
+            parameters={
+                "type": "object",
+                "properties": {"customer_id": {"type": "string"}},
+            },
+        )
+        self.register_tool(
+            name="get_order_details",
+            func=get_order_details,
+            description="Look up enterprise order tracking and shipment line items.",
+            parameters={
+                "type": "object",
+                "properties": {"order_number": {"type": "string"}},
+            },
+        )
+        self.register_tool(
+            name="check_inventory",
+            func=check_inventory,
+            description="Check inventory stock levels, warehouse, and availability.",
+            parameters={
+                "type": "object",
+                "properties": {"sku": {"type": "string"}},
+            },
+        )
+        self.register_tool(
+            name="get_support_ticket",
+            func=get_support_ticket,
+            description="Look up enterprise customer support ticket history and SLA.",
+            parameters={
+                "type": "object",
+                "properties": {"ticket_number": {"type": "string"}},
+            },
+        )
 
     def is_local_tool(self, name: str) -> bool:
         """Check if tool name belongs to local tools."""
