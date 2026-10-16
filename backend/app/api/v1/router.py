@@ -7,6 +7,7 @@ from app.api.v1.endpoints.health import router as health_router
 from app.api.v1.endpoints.llm import router as llm_router
 from app.api.v1.endpoints.mcp import router as mcp_router
 from app.api.v1.endpoints.observability import router as observability_router
+from app.api.v1.endpoints.evaluation import router as evaluation_router
 
 v1_router = APIRouter()
 
@@ -17,3 +18,4 @@ v1_router.include_router(llm_router, prefix="/llm", tags=["LLM Gateway"])
 v1_router.include_router(mcp_router, prefix="/mcp", tags=["Model Context Protocol"])
 v1_router.include_router(agent_router, prefix="/agent", tags=["Agent Orchestrator"])
 v1_router.include_router(observability_router, prefix="/observability", tags=["Observability & Telemetry"])
+v1_router.include_router(evaluation_router, prefix="/evaluation", tags=["Evaluation & Benchmarks"])
