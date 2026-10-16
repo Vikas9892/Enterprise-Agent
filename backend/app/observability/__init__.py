@@ -1,6 +1,21 @@
-"""Observability and audit logging package.
+"""Observability, distributed tracing, metrics, and audit logging package."""
 
-Reserved for distributed tracing, OpenTelemetry, LangSmith tracing integration,
-metrics export (Prometheus), and compliance audit trails to be implemented in
-future phases.
-"""
+from app.observability.langsmith import LangSmithRun, LangSmithTracer, get_langsmith_tracer, langsmith_tracer
+from app.observability.metrics import MetricsCollector, get_metrics, metrics
+from app.observability.middleware import ObservabilityMiddleware
+from app.observability.tracer import Span, Tracer, get_tracer, tracer
+
+__all__ = [
+    "LangSmithRun",
+    "LangSmithTracer",
+    "MetricsCollector",
+    "ObservabilityMiddleware",
+    "Span",
+    "Tracer",
+    "get_langsmith_tracer",
+    "get_metrics",
+    "get_tracer",
+    "langsmith_tracer",
+    "metrics",
+    "tracer",
+]

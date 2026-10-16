@@ -88,6 +88,14 @@ class Settings(BaseSettings):
     anthropic_api_key: Optional[str] = Field(default=None, alias="ANTHROPIC_API_KEY")
     mcp_server_url: str = Field(default="http://localhost:8001", alias="MCP_SERVER_URL")
 
+    # Observability & Evaluation (Phase 6)
+    langsmith_api_key: Optional[str] = Field(default=None, alias="LANGSMITH_API_KEY")
+    langsmith_project: str = Field(default="enterprise-agent", alias="LANGSMITH_PROJECT")
+    langsmith_tracing: bool = Field(default=False, alias="LANGSMITH_TRACING")
+    langsmith_endpoint: str = Field(default="https://api.smith.langchain.com", alias="LANGSMITH_ENDPOINT")
+    otel_service_name: str = Field(default="enterprise-agent-backend", alias="OTEL_SERVICE_NAME")
+    metrics_enabled: bool = Field(default=True, alias="METRICS_ENABLED")
+
     @field_validator("llm_fallback_models", mode="before")
     @classmethod
     def assemble_fallback_models(cls, v: Union[str, List[str]]) -> List[str]:

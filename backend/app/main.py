@@ -59,6 +59,10 @@ def create_application() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # Observability & distributed tracing middleware
+    from app.observability import ObservabilityMiddleware
+    app.add_middleware(ObservabilityMiddleware)
+
     # Direct root health check (e.g. GET /health)
     app.include_router(health_router, tags=["Health"])
 
