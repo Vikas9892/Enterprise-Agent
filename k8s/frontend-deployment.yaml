@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-agent-frontend
+  labels:
+    app: enterprise-agent
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: enterprise-agent
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: enterprise-agent
+        component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: enterprise-agent-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: NEXT_PUBLIC_API_URL
+              value: "/api/v1"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enterprise-agent-frontend
+  labels:
+    app: enterprise-agent
+    component: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: http
+  selector:
+    app: enterprise-agent
+    component: frontend

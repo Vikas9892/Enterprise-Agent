@@ -218,7 +218,56 @@ pytest -ra -q
 
 ---
 
-## 9. Phase Evolution Roadmap
+## 9. Full-Stack Container & Kubernetes Deployment
+
+### Docker Compose Quickstart
+Run the entire production-grade topology (PostgreSQL, Redis, MCP Server, Backend, Frontend) with a single command:
+
+```bash
+docker compose up --build -d
+```
+
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **FastAPI Backend & API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **MCP Tool Server**: [http://localhost:8001/tools](http://localhost:8001/tools)
+- **PostgreSQL 16**: `localhost:5432`
+- **Redis 7**: `localhost:6379`
+
+### Kubernetes Deployment
+Deploy the platform into any standard Kubernetes or Minikube cluster:
+
+```bash
+kubectl apply -f k8s/
+```
+
+Includes:
+- **`backend-deployment.yaml`**: Multi-replica backend Deployment with ConfigMap, HPA (Horizontal Pod Autoscaler), and health probes.
+- **`frontend-deployment.yaml`**: Next.js frontend Deployment and ClusterIP Service.
+- **`mcp-deployment.yaml`**: MCP tool server Deployment and Service.
+- **`ingress.yaml`**: Nginx Ingress Controller rules routing `/api`, `/docs`, and `/` traffic.
+
+---
+
+## 10. Multi-Agent Swarm Collaboration
+
+The platform includes a supervisor-orchestrated multi-agent swarm architecture:
+- **Supervisor Agent**: Decomposes complex user queries into domain-specific subtasks and synthesizes consensus.
+- **Support Agent**: Handles customer issues, CRM inquiries, ticket lookups, and escalations.
+- **Logistics Agent**: Manages shipping, tracking numbers, stock reservations, and carrier schedules.
+- **Compliance Agent**: Validates enterprise policies, GDPR constraints, and spending approval thresholds.
+- **Blackboard Memory**: Shared thread state allowing specialist agents to share structured artifacts and debate findings.
+
+Test the swarm via REST or SSE streaming:
+```bash
+# REST execution
+curl -X POST http://localhost:8000/api/v1/swarm/run \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Customer CUST-001 needs an expedited return on damaged shipment TRK-992 with policy review"}'
+```
+
+---
+
+## 11. Phase Evolution Roadmap
 
 | Phase | Milestone | Status | Description |
 | :--- | :--- | :--- | :--- |
@@ -229,10 +278,12 @@ pytest -ra -q
 | **Phase 5** | **Agent Orchestrator** | Done | State-machine graph engine, cyclical reflection loops, HITL approval checkpoints, tool execution, session persistence |
 | **Phase 6** | **Observability & Eval** | Done | OpenTelemetry distributed tracing, Prometheus metrics, LangSmith run exporter, audit middleware, benchmark suites |
 | **Phase 7** | **Frontend Experience** | Done | Next.js 14 App Router, glassmorphic dark mode, real-time chat, tool trace inspector, HITL controls, observability & benchmark UI |
+| **Phase 8** | **Multi-Agent Swarms & Production Deployment** | Done | Multi-agent swarm orchestration, supervisor delegation, Docker Compose, Kubernetes manifests, CI/CD automation |
 
 ---
 
-## 9. License & Authorship
+## 12. License & Authorship
 
 - **Author**: vikas9892 ([vikast4843@gmail.com](mailto:vikast4843@gmail.com))
 - **Repository**: [https://github.com/Vikas9892/Enterprise-Agent](https://github.com/Vikas9892/Enterprise-Agent)
+

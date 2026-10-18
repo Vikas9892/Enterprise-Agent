@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-agent-mcp
+  labels:
+    app: enterprise-agent
+    component: mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enterprise-agent
+      component: mcp
+  template:
+    metadata:
+      labels:
+        app: enterprise-agent
+        component: mcp
+    spec:
+      containers:
+        - name: mcp-server
+          image: enterprise-agent-mcp:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8001
+              name: http
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /tools/list
+              port: 8001
+            initialDelaySeconds: 10
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enterprise-agent-mcp
+  labels:
+    app: enterprise-agent
+    component: mcp
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8001
+      targetPort: 8001
+      name: http
+  selector:
+    app: enterprise-agent
+    component: mcp
