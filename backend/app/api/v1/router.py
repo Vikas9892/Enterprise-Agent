@@ -8,6 +8,7 @@ from app.api.v1.endpoints.llm import router as llm_router
 from app.api.v1.endpoints.mcp import router as mcp_router
 from app.api.v1.endpoints.observability import router as observability_router
 from app.api.v1.endpoints.evaluation import router as evaluation_router
+from app.api.v1.endpoints.swarm import router as swarm_router
 
 v1_router = APIRouter()
 
@@ -19,3 +20,4 @@ v1_router.include_router(mcp_router, prefix="/mcp", tags=["Model Context Protoco
 v1_router.include_router(agent_router, prefix="/agent", tags=["Agent Orchestrator"])
 v1_router.include_router(observability_router, prefix="/observability", tags=["Observability & Telemetry"])
 v1_router.include_router(evaluation_router, prefix="/evaluation", tags=["Evaluation & Benchmarks"])
+v1_router.include_router(swarm_router, prefix="/swarm", tags=["Multi-Agent Swarm Collaboration"])
