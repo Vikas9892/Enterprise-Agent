@@ -110,7 +110,13 @@ class ToolRegistry:
             },
             is_sensitive=True,
         )
-        from app.tools.builtin_tools import check_inventory, get_customer, get_order_details, get_support_ticket
+        from app.tools.builtin_tools import (
+            check_inventory,
+            get_customer,
+            get_order_details,
+            get_support_ticket,
+            search_knowledge_base,
+        )
 
         self.register_tool(
             name="get_customer",
@@ -146,6 +152,20 @@ class ToolRegistry:
             parameters={
                 "type": "object",
                 "properties": {"ticket_number": {"type": "string"}},
+            },
+        )
+        self.register_tool(
+            name="search_knowledge_base",
+            func=search_knowledge_base,
+            description="Search enterprise policies, manuals, SLA documentation, and standard operating procedures.",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query or knowledge question"},
+                    "category": {"type": "string", "description": "Optional category filter (finance, logistics, compliance)"},
+                    "top_k": {"type": "integer", "description": "Number of reference passages to retrieve"},
+                },
+                "required": ["query"],
             },
         )
 

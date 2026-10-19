@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, Activity, Award, Terminal, Layers, Cpu, CheckCircle2, AlertCircle } from "lucide-react";
+import { Bot, Activity, Award, Terminal, Layers, Cpu, CheckCircle2, AlertCircle, BookOpen } from "lucide-react";
 import { checkBackendHealth } from "@/lib/api";
 
 export default function SidebarNav() {
@@ -24,9 +24,11 @@ export default function SidebarNav() {
 
   const navItems = [
     { name: "Agent Chat", href: "/", icon: Bot },
+    { name: "Knowledge & RAG", href: "/knowledge", icon: BookOpen },
     { name: "Observability", href: "/observability", icon: Activity },
     { name: "Evaluation & Benchmarks", href: "/evaluation", icon: Award },
   ];
+
 
   return (
     <aside className="sidebar">

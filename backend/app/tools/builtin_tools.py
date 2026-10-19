@@ -148,3 +148,18 @@ def get_support_ticket(ticket_number: str = "TCK-8801") -> Dict[str, Any]:
         "status": "investigating",
         "assigned_agent": "Support Specialist Sarah Connor",
     }
+
+
+def search_knowledge_base(query: str, category: str = "", top_k: int = 3) -> Dict[str, Any]:
+    """Search enterprise documentation, standard operating procedures, policies, and knowledge base."""
+    from app.knowledge.service import knowledge_service
+
+    cat_filter = category.strip() if category and category.strip() else None
+    result = knowledge_service.query(query=query, top_k=top_k, category=cat_filter)
+    return {
+        "query": query,
+        "count": result["count"],
+        "citations": result["citations"],
+        "context": result["grounded_context"],
+    }
+

@@ -34,9 +34,9 @@ ENTERPRISE_SWARM_AGENTS: Dict[str, SpecialistAgentDefinition] = {
         id="support_agent",
         name="Customer Triage Specialist",
         persona_id="customer_support",
-        role="Triage customer profiles, verify accounts, and inspect support SLA commitments.",
-        capabilities=["customer_lookup", "ticket_triage", "sla_verification"],
-        domains=["customer", "account", "ticket", "sla"],
+        role="Triage customer profiles, verify accounts, and inspect support SLA commitments and standard operating procedures.",
+        capabilities=["customer_lookup", "ticket_triage", "sla_verification", "knowledge_retrieval"],
+        domains=["customer", "account", "ticket", "sla", "sop", "knowledge", "guide"],
     ),
     "logistics_agent": SpecialistAgentDefinition(
         id="logistics_agent",
@@ -50,11 +50,12 @@ ENTERPRISE_SWARM_AGENTS: Dict[str, SpecialistAgentDefinition] = {
         id="compliance_agent",
         name="Governance & Policy Compliance Officer",
         persona_id="coordinator",
-        role="Evaluate financial thresholds, regulatory policy compliance, and HITL approval checkpoints.",
-        capabilities=["policy_verification", "refund_assessment", "audit_compliance"],
-        domains=["refund", "credit", "cancel", "compliance", "policy"],
+        role="Evaluate financial thresholds, regulatory policy compliance, knowledge base policies, and HITL approval checkpoints.",
+        capabilities=["policy_verification", "refund_assessment", "audit_compliance", "knowledge_retrieval"],
+        domains=["refund", "credit", "cancel", "compliance", "policy", "gdpr", "procedure", "rule"],
     ),
 }
+
 
 
 class SubTaskAssignment(BaseModel):

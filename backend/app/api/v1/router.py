@@ -9,6 +9,7 @@ from app.api.v1.endpoints.mcp import router as mcp_router
 from app.api.v1.endpoints.observability import router as observability_router
 from app.api.v1.endpoints.evaluation import router as evaluation_router
 from app.api.v1.endpoints.swarm import router as swarm_router
+from app.api.v1.endpoints.knowledge import router as knowledge_router
 
 v1_router = APIRouter()
 
@@ -21,3 +22,5 @@ v1_router.include_router(agent_router, prefix="/agent", tags=["Agent Orchestrato
 v1_router.include_router(observability_router, prefix="/observability", tags=["Observability & Telemetry"])
 v1_router.include_router(evaluation_router, prefix="/evaluation", tags=["Evaluation & Benchmarks"])
 v1_router.include_router(swarm_router, prefix="/swarm", tags=["Multi-Agent Swarm Collaboration"])
+v1_router.include_router(knowledge_router, prefix="/knowledge", tags=["Enterprise Knowledge & RAG"])
+
