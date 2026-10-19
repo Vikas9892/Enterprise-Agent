@@ -267,7 +267,32 @@ curl -X POST http://localhost:8000/api/v1/swarm/run \
 
 ---
 
-## 11. Phase Evolution Roadmap
+## 11. Enterprise Knowledge Retrieval & Hybrid RAG
+
+The platform features an enterprise-grade document ingestion and hybrid retrieval engine:
+- **Multi-Format Ingestion**: Ingests Markdown, plaintext, CSV tables, and structured JSON with recursive semantic chunking, fixed window, and markdown header hierarchy preservation.
+- **Dense Vector Embeddings**: High-throughput normalized 128-dimensional semantic embeddings with cosine similarity and metadata filtering.
+- **Sparse BM25 Okapi Index**: Robertson-Spärck Jones IDF keyword retrieval with term saturation and stopword elimination.
+- **Reciprocal Rank Fusion (RRF)**: Merges dense vector and sparse lexical ranks using $RRF(d) = \sum \frac{w_i}{k + rank_i(d)}$ with configurable $\alpha$ balance.
+- **Maximal Marginal Relevance (MMR)**: Re-ranks candidate passages to minimize semantic redundancy and maximize information diversity.
+- **Grounding Guardrails & Citation Attribution**: Verifies that LLM statements are factually grounded in source passages and detects hallucinations with automated confidence scoring.
+
+---
+
+## 12. Multi-Tenant Administration & Dynamic Governance
+
+Production-ready enterprise isolation and policy enforcement:
+- **Multi-Tenant Workspaces**: Organization-level isolation, project workspaces, and per-tenant configurations.
+- **Cryptographic API Key Management**: Secure `ea_live_...` secrets hashed with SHA-256 digests and fine-grained authorization scopes.
+- **Sliding-Window Rate Limiting & Token Quotas**: Minute-level request rate limiting (RPM) and monthly token/spend budget enforcement.
+- **Real-Time PII Masking**: Automatically redacts credit cards, SSNs, email addresses, phone numbers, and API tokens before persistence or external dispatch.
+- **Adversarial Prompt Injection Defense**: Heuristic detectors identifying system overrides, jailbreak attempts, and safety bypass instructions.
+- **Dynamic Policy Engine**: Runtime configurable rules governing financial spend caps, tool permissions by role, and mandatory HITL approval checkpoints.
+- **Immutable Audit Trail**: Centralized logging recording all governed actions, rule violations, and PII redactions for compliance auditing.
+
+---
+
+## 13. Phase Evolution Roadmap
 
 | Phase | Milestone | Status | Description |
 | :--- | :--- | :--- | :--- |
@@ -279,11 +304,14 @@ curl -X POST http://localhost:8000/api/v1/swarm/run \
 | **Phase 6** | **Observability & Eval** | Done | OpenTelemetry distributed tracing, Prometheus metrics, LangSmith run exporter, audit middleware, benchmark suites |
 | **Phase 7** | **Frontend Experience** | Done | Next.js 14 App Router, glassmorphic dark mode, real-time chat, tool trace inspector, HITL controls, observability & benchmark UI |
 | **Phase 8** | **Multi-Agent Swarms & Production Deployment** | Done | Multi-agent swarm orchestration, supervisor delegation, Docker Compose, Kubernetes manifests, CI/CD automation |
+| **Phase 9** | **Enterprise Knowledge Retrieval & Hybrid RAG** | Done | Semantic chunking, vector embeddings, BM25 Okapi, Reciprocal Rank Fusion, MMR reranking, grounding guardrails, UI |
+| **Phase 10** | **Multi-Tenant Administration & Governance Portal** | Done | Organization workspaces, API key quotas, rate limiting, real-time PII masking, policy engine, swarm visualizer & admin UI |
 
 ---
 
-## 12. License & Authorship
+## 14. License & Authorship
 
 - **Author**: vikas9892 ([vikast4843@gmail.com](mailto:vikast4843@gmail.com))
 - **Repository**: [https://github.com/Vikas9892/Enterprise-Agent](https://github.com/Vikas9892/Enterprise-Agent)
+
 
