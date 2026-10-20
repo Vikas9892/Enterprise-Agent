@@ -6,7 +6,15 @@ import TopHeader from "@/components/layout/TopHeader";
 export const metadata: Metadata = {
   title: "Enterprise Agent Platform | Autonomous Agentic AI",
   description: "Next-generation enterprise agent orchestration, reflection loops, observability, and evaluation.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
+
 
 export default function RootLayout({
   children,
